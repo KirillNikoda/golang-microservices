@@ -2,6 +2,9 @@ package domain
 
 import (
 	"fmt"
+	"net/http"
+
+	"github.com/KirillNikoda/golang-microservices/mvc/utils"
 )
 
 var (
@@ -10,11 +13,15 @@ var (
 	}
 )
 
-func GetUser(userId int) (*User, error) {
+func GetUser(userId int) (*User, *utils.ApplicationError) {
 	if user := users[userId]; user != nil {
 		return user, nil
 
 	}
 
-	return nil, fmt.Errorf("user with id %v was not found", userId)
+	return nil, &utils.ApplicationError{
+		Message:    fmt.Sprintf("user with id %v was not found", userId),
+		StatusCode: http.StatusNotFound,
+		Code:       "not_found",
+	}
 }
