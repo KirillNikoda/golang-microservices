@@ -11,9 +11,21 @@ var (
 	users = map[int]*User{
 		123: {Id: 123, FirstName: "Fede", LastName: "Leon", Email: "myemail@gmail.com"},
 	}
+
+	UserDao usersDaoInterface
 )
 
-func GetUser(userId int) (*User, *utils.ApplicationError) {
+type usersDaoInterface interface {
+	GetUser(int) (*User, *utils.ApplicationError)
+}
+
+func init() {
+	UserDao = &userDao{}
+}
+
+type userDao struct{}
+
+func (u *userDao) GetUser(userId int) (*User, *utils.ApplicationError) {
 	if user := users[userId]; user != nil {
 		return user, nil
 
